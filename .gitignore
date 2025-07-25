@@ -1,0 +1,12 @@
+# 忽略 .env 文件
+.env
+
+# 忽略本地IDE和操作系统生成的文件
+*.log
+__pycache__/
+*.pyc
+.DS_Store
+Thumbs.db
+
+# 忽略Python虚拟环境
+venv/

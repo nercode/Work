@@ -1,0 +1,5 @@
+item,model,input_tokens,output_tokens
+query_parser,qwen3-235b-a22b,22655,26803
+context_generator,glm-4-plus,27273,64132
+pre_experiments,qwen3-235b-a22b-instruct-2507,7992,12062
+generate_scenarios,qwen-plus,6219,7452

@@ -90,11 +90,13 @@ class PreExperimentsService:
 	@staticmethod
 	def calculate_feature_score(queries: List[Dict], feature_score: str):
 		feature_scores_sum = {
+			'B': [0.0, 0.0],
 			'N': [0.0, 0.0],
 			'R': [0.0, 0.0],
 			'RT': [0.0, 0.0]
 		}
 		feature_counts = {
+			'B': 0,
 			'N': 0,
 			'R': 0,
 			'RT': 0
@@ -125,7 +127,7 @@ class PreExperimentsService:
 					pass
 
 		average_scores = {}
-		for feature in ['N', 'R', 'RT']:
+		for feature in ['B', 'N', 'R', 'RT']:
 			count = feature_counts[feature]
 			if count > 0:
 				avg_score1 = feature_scores_sum[feature][0] / count

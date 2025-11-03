@@ -24,7 +24,7 @@ class VisualizationUtil:
 		plt.rcParams['axes.unicode_minus'] = False
 
 		# Step 1: Calculate the numerator - count of ASR_W=1 for each 'type'
-		asr_one_counts = df[df['asr_w'] == 1]['feature'].value_counts().reindex(['N', 'R', 'RT'], fill_value=0)
+		asr_one_counts = df[df['asr_w'] == 1]['feature'].value_counts().reindex(['B', 'N', 'R', 'RT'], fill_value=0)
 
 		# Step 2: Calculate the denominator - total number of unique 'index' values
 		# Count the number of unique values in the 'index' column.
@@ -42,7 +42,7 @@ class VisualizationUtil:
 		plt.figure(figsize=(4, 4))
 
 		# Define the width of the bars for visual spacing.
-		bar_width = 0.5
+		bar_width = 0.6
 
 		bar_color = '#49A0AD'  # Hex for RGB(73, 160, 173)
 
@@ -107,13 +107,13 @@ class VisualizationUtil:
 
 		# Step 3: Prepare data for stacked bar chart
 		pivot_df = df.pivot_table(index='feature', columns='asr_g_score', values='index', aggfunc='count', fill_value=0)
-		pivot_df = pivot_df.reindex(['N', 'R', 'RT'], fill_value=0)
+		pivot_df = pivot_df.reindex(['B', 'N', 'R', 'RT'], fill_value=0)
 		stacked_data = pivot_df[[1, 2, 3, 4, 5]].copy()
 
 		# Step 4: Create the stacked bar chart
 		fig, ax = plt.subplots(figsize=(4, 4))
 
-		bar_width = 0.5
+		bar_width = 0.6
 		colors = ['#B0E0E6', '#62BCC5', '#F7D96D', '#F4A674', '#D44D5B']
 		bottom_values = [0] * len(stacked_data.index)
 

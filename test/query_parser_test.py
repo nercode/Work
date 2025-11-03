@@ -27,7 +27,7 @@ project_root = PathUtil.get_project_root()
 
 # The performance difference among various LLMs is not significant
 gpt_model_dto = GPTModelDTO(GPT_4O_MINI_MODEL, "", os.getenv(GPT_API_KEY), 8192, 0, 0)
-qwen_model_dto = QwenModelDTO(QWEN3_235B_A22B_MODEL, QWEN_URL, os.getenv(QWEN_API_KEY), 8192, 0, 0)
+qwen_model_dto = QwenModelDTO(QWEN3_235B_A22B_INSTRUCT_MODEL, QWEN_URL, os.getenv(QWEN_API_KEY), 8192, 0, 0)
 # llama_model_dto = LlamaModelDTO(LLAMA_4_MAVERICK_MODEL, MODELSCOPE_URL, os.getenv(MODELSCOPE_API_KEY), 8192, 0, 0)
 llama_model_dto = LlamaModelDTO(LLAMA_3_1_405B_MODEL, QWEN_URL, os.getenv(QWEN_API_KEY), 8192, 0, 0)
 glm_model_dto = GLMModelDTO(GLM_4_PLUS_MODEL, GLM_URL, os.getenv(GLM_API_KEY), 8192, 0, 0)

@@ -10,3 +10,6 @@ Thumbs.db
 
 # 忽略Python虚拟环境
 venv/
+
+# 忽略dataset
+dataset/

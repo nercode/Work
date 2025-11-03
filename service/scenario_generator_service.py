@@ -11,10 +11,7 @@ from service.base_model_service import BaseModelService
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
-class ContextGeneratorService:
-	"""
-	generate context
-	"""
+class ScenarioGeneratorService:
 
 	def __init__(self, base_model_service: BaseModelService):
 		self.base_model_service = base_model_service
@@ -25,7 +22,7 @@ class ContextGeneratorService:
 		return data
 
 
-	def generate_contexts_with_online_model(self, few_shot: List[Dict], queries: List[Dict], batch_size: int = 10) -> List[Dict]:
+	def generate_scenarios_with_online_model(self, few_shot: List[Dict], queries: List[Dict], batch_size: int = 10) -> List[Dict]:
 		"""
 		process harmful queries
 
@@ -75,7 +72,7 @@ class ContextGeneratorService:
 
 
 	@staticmethod
-	def generate_contexts_with_offline_model(model_path: Path, few_shot: List[Dict], queries: List[Dict], batch_size: int = 10) -> List[Dict]:
+	def generate_scenarios_with_offline_model(model_path: Path, few_shot: List[Dict], queries: List[Dict], batch_size: int = 10) -> List[Dict]:
 		"""
 		process harmful queries
 

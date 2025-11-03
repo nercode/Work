@@ -55,7 +55,8 @@ pre_experiments_service = PreExperimentsService(base_model_service)
 queries_file = project_root / DATASET_DIR / PRE_EXPERIMENTS_DIR / QUERIES_FILE
 queries = FileUtil.read_data_from_jsonl(queries_file)
 
-results_file = project_root / DATASET_DIR / PRE_EXPERIMENTS_DIR / RESULTS_FILE
+# results_file = project_root / DATASET_DIR / PRE_EXPERIMENTS_DIR / RESULTS_FILE
+results_file = project_root / DATASET_DIR / RESULTS_FILE
 
 def test_generate_scenarios():
 	# randomly select 20
@@ -67,12 +68,13 @@ def test_generate_scenarios():
 		print(f"index:{index}")
 
 		scenarios = pre_experiments_service.generate_scenarios(query_content)
+		results.append({"index": index, "query": query_content, "feature": "B", "scenario": ""})
 		results.append({"index": index, "query": query_content, "feature": "N", "scenario": scenarios.get("N")})
 		results.append({"index": index, "query": query_content, "feature": "R", "scenario": scenarios.get("R")})
 		results.append({"index": index, "query": query_content, "feature": "RT", "scenario": scenarios.get("RT")})
 
 		# 结果写回文件
-		FileUtil.write_data_to_csv_a(results_file, results)
+		FileUtil.write_data_to_csv_append(results_file, results)
 		results.clear()
 
 
@@ -81,14 +83,14 @@ def test_execute_attacks():
 	for result in results:
 		result["response"] = pre_experiments_service.execute_attacks(result.get("query"), result.get("scenario"))
 		print(f"{result['index']}: {result['response']}")
-	FileUtil.write_data_to_csv_w(results_file, results)
+	FileUtil.write_data_to_csv_cover(results_file, results)
 
 
 def test_evaluate_asr_w():
 	results = FileUtil.read_data_from_csv(results_file)
 	for result in results:
 		result["asr_w"] = PreExperimentsService.evaluate_asr_w(result.get("response"), ASR_W)
-	FileUtil.write_data_to_csv_w(results_file, results)
+	FileUtil.write_data_to_csv_cover(results_file, results)
 
 
 def test_evaluate_asr_g():
@@ -98,24 +100,26 @@ def test_evaluate_asr_g():
 		result["asr_g_reason"], result["asr_g_score"] = PreExperimentsService.extract_reason_and_score(judgment)
 		print(f"{result['index']}: {result['asr_g_score']}")
 
-	FileUtil.write_data_to_csv_w(results_file, results)
+	FileUtil.write_data_to_csv_cover(results_file, results)
 
 
 def test_evaluate_features(text_type: str):
 	results = FileUtil.read_data_from_csv(results_file)
 	for result in results:
-		time.sleep(1)
 		if text_type == "scenario":
-			result["feature_score_scenario"] = pre_experiments_service.evaluate_features(result.get("query"), result.get("scenario"))
-			print(f"{result['index']}: {result['feature']}: {result['feature_score_scenario']}")
+			if result.get("feature") != "B":
+				time.sleep(1)
+				result["feature_score_scenario"] = pre_experiments_service.evaluate_features(result.get("query"), result.get("scenario"))
+				print(f"{result['index']}: {result['feature']}: {result['feature_score_scenario']}")
 
 		if text_type == "prompt":
+			time.sleep(1)
 			query_content = result.get("query")
 			text = TABLE_ATTACKER_PROMPT.format(query=query_content, scenario=result.get("scenario"))
 			result["feature_score_prompt"] = pre_experiments_service.evaluate_features(query_content, text)
 			print(f"{result['index']}: {result['feature']}: {result['feature_score_prompt']}")
 
-	FileUtil.write_data_to_csv_w(results_file, results)
+	FileUtil.write_data_to_csv_cover(results_file, results)
 
 
 def test_calculate_feature_score(feature_score: str):
@@ -140,11 +144,32 @@ def test_plot_pre_asr_g_score():
 # test_evaluate_asr_w()
 # test_evaluate_asr_g()
 
-# test_evaluate_features("prompt")
 # test_evaluate_features("scenario")
+# test_evaluate_features("prompt")
 
 # test_calculate_feature_score("feature_score_prompt")
 # test_calculate_feature_score("feature_score_scenario")
 
 # test_plot_pre_asr_w()
 # test_plot_pre_asr_g_score()
+
+
+def test_evaluate(text_type: str):
+	results = FileUtil.read_data_from_csv(results_file)
+	for result in results:
+		if text_type == "scenario":
+			time.sleep(1)
+			result["feature_score_scenario"] = pre_experiments_service.evaluate_features(result.get("query"), result.get("scenario"))
+			print(f"{result['index']}: {result['feature_score_scenario']}")
+
+		if text_type == "prompt":
+			time.sleep(1)
+			query_content = result.get("query")
+			text = TABLE_ATTACKER_PROMPT.format(query=query_content, scenario=result.get("scenario"))
+			result["feature_score_prompt"] = pre_experiments_service.evaluate_features(query_content, text)
+			print(f"{result['index']}: {result['feature_score_prompt']}")
+
+	FileUtil.write_data_to_csv_cover(results_file, results)
+
+# test_evaluate("scenario")
+test_calculate_feature_score("feature_score_scenario")

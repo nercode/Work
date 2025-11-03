@@ -73,7 +73,7 @@ class FileUtil:
 
 
 	@staticmethod
-	def write_data_to_csv_a(file_path: Path, data: List[Dict]) -> None:
+	def write_data_to_csv_append(file_path: Path, data: List[Dict]) -> None:
 		"""
 		write data to a CSV file with append mode.
 
@@ -94,7 +94,7 @@ class FileUtil:
 
 
 	@staticmethod
-	def write_data_to_csv_w(file_path: Path, data: List[Dict]):
+	def write_data_to_csv_cover(file_path: Path, data: List[Dict]):
 		"""
 		write data to a CSV file with cover mode.
 

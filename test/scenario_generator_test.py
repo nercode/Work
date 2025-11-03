@@ -8,7 +8,7 @@ from dto.gpt_model_dto import GPTModelDTO
 from dto.qwen_model_dto import QwenModelDTO
 from dto.deepseek_model_dto import DeepSeekModelDTO
 from service.openai_service import OpenAIService
-from service.context_generator_service import ContextGeneratorService
+from service.scenario_generator_service import ScenarioGeneratorService
 from util.file_util import FileUtil
 from util.path_util import PathUtil
 from util.token_counter_util import TokenCounterUtil
@@ -31,13 +31,12 @@ gpt_model_dto = GPTModelDTO(GPT_4O_MINI_MODEL, "", os.getenv(GPT_API_KEY), 16384
 base_model_service = OpenAIService(glm_model_dto)
 # base_model_service = OpenAIService(gpt_model_dto)
 
-# context生成服务类
-context_generator_service = ContextGeneratorService(base_model_service)
+scenario_generator_service = ScenarioGeneratorService(base_model_service)
 
 # prepare few_shot
-few_shot_file = project_root / DATASET_DIR / CONTEXT_GENERATOR_FILE
+few_shot_file = project_root / DATASET_DIR / SCENARIO_GENERATOR_FILE
 data = FileUtil.read_data_from_jsonl(few_shot_file)
-few_shot = context_generator_service.prepare_few_shot(data)
+few_shot = scenario_generator_service.prepare_few_shot(data)
 
 # prepare queries
 queries_file = project_root / DATASET_DIR / QUERIES_FILE
@@ -47,8 +46,8 @@ queries = FileUtil.read_data_from_jsonl(queries_file)
 model = project_root / MODEL_DIR / QWEN3_0_6B_DIR
 
 def test_process_queries():
-	updated_queries = context_generator_service.generate_contexts_with_online_model(few_shot, queries, 10)
-	# updated_queries = context_generator_service.generate_contexts_with_offline_model(model, few_shot, queries, 10)
+	updated_queries = scenario_generator_service.generate_scenarios_with_online_model(few_shot, queries, 10)
+	# updated_queries = scenario_generator_service.generate_contexts_with_offline_model(model, few_shot, queries, 10)
 	# 显示结果
 	print(updated_queries)
 	# 将更新后的问题写回文件

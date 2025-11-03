@@ -13,3 +13,4 @@ venv/
 
 # 忽略dataset
 dataset/
+.idea/
